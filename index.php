@@ -25,10 +25,10 @@ function getMatrix2x2 () {
  *
 3
 4
+1 1 0
 1 1 1
-1 1 1
-1 1 1
-1 1 1
+0 1 1
+0 1 1
 */
 
 function getMatrix3x4 () {
