@@ -10,61 +10,119 @@ error_reporting(E_ALL);
 1 1
 */
 
+function getMatrix2x2 () {
+    $a = array();
+    $a[0][0] = 1;
+    $a[0][1] = 1;
+    $a[1][0] = 1;
+    $a[1][1] = 1;
 
+    return $a;
+}
 
+/*
+ * DATA 2 - EXAMPLE
+ *
+3
+4
+1 1 1
+1 1 1
+1 1 1
+1 1 1
+*/
+
+function getMatrix3x4 () {
+    $a = array();
+    $a[0][0] = 1;
+    $a[0][1] = 1;
+    $a[0][2] = 0;
+    $a[1][0] = 1;
+    $a[1][1] = 1;
+    $a[1][2] = 1;
+    $a[2][0] = 0;
+    $a[2][1] = 1;
+    $a[2][2] = 1;
+    $a[3][0] = 0;
+    $a[3][1] = 1;
+    $a[3][2] = 1;
+
+    return $a;
+}
 
 function getMatrixPaths($a) {
 
-    foreach ($a as $x=>$i) {
+    $paths = 0;
 
-        foreach ($i as $y=>$j){
-
-            if ($j == 1) {
-                // create sub-matrix A
-                $matrixA = getSubMatrix ($a, $x+1, $y);
-
-            }
-        }
+    if (count($a) == 1 && count ($a[0]) == 1){
+        $paths++;
+        //return $paths;
     }
+
+    $x = 0;
+    $y = 0;
+
+    if ($a[0][0] == 1) {
+        // create sub-matrix A (turn x right) and sub-matrix B (turn y bottom)
+        $subMatrixA = getSubMatrix ($a, $x+1, $y);
+        $subMatrixB = getSubMatrix ($a, $x, $y+1);
+
+        if($subMatrixA) {
+            $paths += getMatrixPaths($subMatrixA);
+        }
+
+        if($subMatrixB) {
+            $paths += getMatrixPaths($subMatrixB);
+        }
+
+    }
+
+
+
+    return $paths;
 }
 
 function getSubMatrix($a, $i, $j) {
 
-    if (isset ($a[$i]) && isset($a[$j])){
+    if (isset($a[$i][$j])) {
 
         $submatrix  = array();
         $width      = count ($a);
         $height     = count ($a[$i]);
 
+        $ii = 0;
+
+
         for ($m = $i; $m < $width; $m++) {
 
+            $jj = 0;
             for ($n = $j; $n < $height; $n++) {
 
-                $submatrix[$m][$n] = $a[$m][$n];
+                $submatrix[$ii][$jj] = $a[$m][$n];
+                $jj++;
 
             }
+
+            $ii++;
 
         }
 
         return $submatrix;
 
-    }else{
+    } else {
         return false;
     }
-
 }
 
+
 // initial array $a
-$a = array();
-$a[0][0] = 1;
-$a[0][1] = 1;
-$a[1][0] = 1;
-$a[1][1] = 1;
+$a = getMatrix2x2();
+$b = getMatrix3x4();
 
-$totalPaths = getMatrixPaths($a);
+$totalPathsA = getMatrixPaths($a);
+$totalPathsB = getMatrixPaths($b);
 
-echo "This matrix have " . $totalPaths ." paths.";
-
+echo "<br> This matrixA have " . $totalPathsA ." paths.";
+echo "<br> This matrixB have " . $totalPathsB ." paths.";
 
 ?>
 
